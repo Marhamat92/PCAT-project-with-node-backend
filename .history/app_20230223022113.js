@@ -93,9 +93,6 @@ app.put('/photos/:id', async (req, res) => {
 
 //delete photo by id
 app.delete('/photos/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id })
-  let photoPath = __dirname + '/public' + photo.image
-  fs.unlinkSync(photoPath)
   await Photo.findByIdAndRemove(req.params.id)
   res.redirect('/')
 })

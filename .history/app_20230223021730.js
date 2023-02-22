@@ -27,7 +27,7 @@ app.use(express.static('public')); //!static dosyaları kullanmak için
 app.use(express.urlencoded({ extended: true })); //! parse application/x-www-form-urlencoded //url deki verileri okumak için
 app.use(express.json()); //! parse application/json  //json verileri okumak için
 app.use(fileUpload()); //!file upload için
-app.use(methodOverride('_method', { methods: ['POST', 'GET'] })) //!method override and we use this to override the post method to put method since we can't use put method in html form
+app.use(methodOverride('_method'))
 
 //ROUTES
 app.get('/', async (req, res) => {
@@ -93,14 +93,9 @@ app.put('/photos/:id', async (req, res) => {
 
 //delete photo by id
 app.delete('/photos/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id })
-  let photoPath = __dirname + '/public' + photo.image
-  fs.unlinkSync(photoPath)
-  await Photo.findByIdAndRemove(req.params.id)
+  await Photo.findByIdAndDelete(req.params.id)
   res.redirect('/')
 })
-
-
 
 
 const port = 3000

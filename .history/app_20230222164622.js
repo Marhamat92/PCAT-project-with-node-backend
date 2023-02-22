@@ -1,20 +1,17 @@
-const express = require('express')  //!express
-const app = express()  //!express
-const fileUpload = require('express-fileupload'); //!file upload için
-const path = require('path')  //!path
-const fs = require('fs') //!file system
-const ejs = require('ejs') //!ejs
-const mongoose = require('mongoose'); //!mongoose
-const methodOverride = require('method-override') //!method override and we use this to override the post method to put method since we can't use put method in html form
-
-
+const express = require('express')
+const app = express()
+const fileUpload = require('express-fileupload');
+const path = require('path')
+const fs = require('fs')
+const ejs = require('ejs')
+const mongoose = require('mongoose');
 
 
 //!import photo model
 const Photo = require('./models/Photo')
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost/pcat-test-db', { useNewUrlParser: true }, { useUnifiedTopology: true }, { useFindAndModify: false }, { strctQuery: false })
+mongoose.connect('mongodb://localhost/pcat-test-db', { useNewUrlParser: true }, { useUnifiedTopology: true })
 
 
 
@@ -27,7 +24,6 @@ app.use(express.static('public')); //!static dosyaları kullanmak için
 app.use(express.urlencoded({ extended: true })); //! parse application/x-www-form-urlencoded //url deki verileri okumak için
 app.use(express.json()); //! parse application/json  //json verileri okumak için
 app.use(fileUpload()); //!file upload için
-app.use(methodOverride('_method', { methods: ['POST', 'GET'] })) //!method override and we use this to override the post method to put method since we can't use put method in html form
 
 //ROUTES
 app.get('/', async (req, res) => {
@@ -74,32 +70,6 @@ app.post('/photos', async (req, res) => {
     }
   )
 })
-
-
-//update photo by id 1) get edit page
-app.get('/photos/edit/:id', async (req, res) => {
-  const photo = await Photo.findById(req.params.id)
-  res.render('edit', { photo })
-})
-
-//update photo by id 2) update photo
-app.put('/photos/:id', async (req, res) => {
-  let photo = await Photo.findById(req.params.id)
-  photo.title = req.body.title
-  photo.description = req.body.description
-  photo.save()
-  res.redirect(`/photos/${req.params.id}`)
-})
-
-//delete photo by id
-app.delete('/photos/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id })
-  let photoPath = __dirname + '/public' + photo.image
-  fs.unlinkSync(photoPath)
-  await Photo.findByIdAndRemove(req.params.id)
-  res.redirect('/')
-})
-
 
 
 
