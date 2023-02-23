@@ -20,8 +20,11 @@
             </button>
             <div class="collapse navbar-collapse tm-nav" id="navbar-nav">
               <ul class="navbar-nav text-uppercase">
+
+
+
                 <li class="nav-item">
-                  <a class="nav-link tm-nav-link" href="/">Photos</a>
+                  <a class="nav-link tm-nav-link" href="/">Photos <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link tm-nav-link" href="/about">About</a>
@@ -37,3 +40,17 @@
     </div>
   </div>
 </div>
+
+<script>
+  //make active class work for nav-item depend on the page we are in
+  $(document).ready(function () {
+    var url = window.location;
+    // Will only work if string in href matches with location
+    $('ul.nav a[href="' + url + '"]').parent().addClass('active');
+
+    // Will also work for relative and absolute hrefs
+    $('ul.nav a').filter(function () {
+      return this.href == url;
+    }).parent().addClass('active');
+  });
+</script>

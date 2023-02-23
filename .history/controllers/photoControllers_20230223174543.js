@@ -1,15 +1,10 @@
 const Photo = require('../models/Photo')  //!import photo model
-const fs = require('fs')
+const fs = require('fs') //!file system
 
 
 exports.getAllPhotos = async (req, res) => {
-  const page = req.query.page || 1 //!eğer query stringte page yoksa 1 olarak ayarla 
-  const photosPerPage = 3 //!sayfada gösterilecek foto sayısı
-  const totalPhotos = await Photo.countDocuments() //!toplam foto sayısı
-  const photos = await Photo.find({}).sort('-dateCreated').skip((page - 1) * photosPerPage).limit(photosPerPage) //!sayfaya göre foto getir
-  const pages = Math.ceil(totalPhotos / photosPerPage) //!toplam sayfa sayısı
-  const currentPage = page
-  res.render('index', { photos, pages, currentPage })
+  const photos = await Photo.find({}).sort('-dateCreated')
+  res.render('index', { photos })
 }
 
 exports.getPhoto = async (req, res) => {
@@ -24,7 +19,7 @@ exports.createPhoto = async (req, res) => {
     fs.mkdirSync(uploadDir);
   }
   let imageFile = req.files.image; //!dosya bilgilerini al
-  let uploadPath = __dirname + '/../public/uploads/' + imageFile.name;  //!dosyanın yükleneceği yolu belirle
+  let uploadPath = __dirname + './../public/uploads/' + imageFile.name;  //!dosyanın yükleneceği yolu belirle
 
   imageFile.mv(  //!dosyayı yükle
     uploadPath,

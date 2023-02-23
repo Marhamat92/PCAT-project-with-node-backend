@@ -6,8 +6,6 @@ const ejs = require('ejs') //!ejs
 const mongoose = require('mongoose'); //!mongoose
 const methodOverride = require('method-override') //!method override and we use this to override the post method to put method since we can't use put method in html form
 
-mongoose.set('strictQuery', false);
-
 //!import photo controller
 const photoController = require('./controllers/photoControllers');
 const pageController = require('./controllers/pageControllers');

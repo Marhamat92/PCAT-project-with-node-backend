@@ -37,3 +37,13 @@
     </div>
   </div>
 </div>
+
+<script>
+  //add active class to nav item when clicked
+  $(document).ready(function () {
+    $(".nav-item").click(function () {
+      $(".nav-item").removeClass("active");
+      $(this).addClass("active");
+    });
+  });
+</script>
