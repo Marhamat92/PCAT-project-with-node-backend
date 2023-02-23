@@ -3,17 +3,23 @@ const app = express()  //!express
 const fileUpload = require('express-fileupload'); //!file upload için
 const path = require('path')  //!path
 const ejs = require('ejs') //!ejs
+var dotenv = require('dotenv'); //!dotenv
 const mongoose = require('mongoose'); //!mongoose
 const methodOverride = require('method-override') //!method override and we use this to override the post method to put method since we can't use put method in html form
 
 mongoose.set('strictQuery', false);
+
+dotenv.config(); //dotenv
+const url = process.env.MONGOLAB_URI
 
 //!import photo controller
 const photoController = require('./controllers/photoControllers');
 const pageController = require('./controllers/pageControllers');
 
 //! Connect to MongoDB
-mongoose.connect('mongodb://localhost/pcat-test-db', { useNewUrlParser: true }, { useUnifiedTopology: true }, { useFindAndModify: false }, { strctQuery: false })
+mongoose.connect(url, { useNewUrlParser: true }, { useUnifiedTopology: true }, { useFindAndModify: false }, { strctQuery: false })
+  .then(() => console.log('MongoDB Connected...'))
+  .catch(err => console.log(err))
 
 
 //! Set view engine
@@ -47,7 +53,7 @@ app.get('/add', pageController.getAddPage)
 
 
 
-const port = 3000
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port} ...`)
